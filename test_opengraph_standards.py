@@ -1,9 +1,11 @@
 import requests
+import pytest
 from bs4 import BeautifulSoup
 
 
 class TestOpenGraphStandards:
 
+    # Required og tags
     og_required = [
         'og:title',
         'og:type',
@@ -11,10 +13,10 @@ class TestOpenGraphStandards:
         'og:image',
     ]
 
+    # Stors og tags found on page
     og_found = []
 
-    #site = requests.get("http://ogp.me/")
-
+    # Test if the page has required tags
     @pytest.fixture
     def test_for_og_standards(self, url):
         for og_type in self.og_required:
@@ -24,23 +26,19 @@ class TestOpenGraphStandards:
                 else:
                     continue
 
+        # Run test against requred list every time
+        self.test_required()
+
+    # Test if the tags found match required tags
     @pytest.fixture
     def test_required(self):
         for item in self.og_required:
             assert item in self.og_found, "Item: {} was not found".format(item)
             return True
 
-
+    # Load url and parse it
     @pytest.fixture
     def get_url(self, url):
-        site_url = url
-        og_site = requests.get(site_url)
+        og_site = requests.get(url)
         soup = BeautifulSoup(og_site.content, "html.parser")
-        og_data = soup.find_all("meta")
-        return og_data
-
-test = TestOpenGraphStandards()
-
-data = test.get_url("http://mozilla.com")
-test.test_for_og_standards(data)
-print test.test_required()
+        return soup.find_all("meta")
