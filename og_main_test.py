@@ -1,32 +1,34 @@
 import pytest
 from test_opengraph_standards import TestOpenGraphStandards
 
+og_required = [
+    'og:title',
+    'og:type',
+    'og:url',
+    'og:image',
+]
+
+og_found = []
+
 def test_it():
     test = TestOpenGraphStandards() #Instansiate object
-
-<<<<<<< HEAD
+    og_assert = True
     # Pass in URL
-    data = test.get_meta("http://ogp.me/")
-    count = 0
+    data = test.get_url("http://nightly.mozilla.org")
+
     #Test list and add found tags to list
     for og_type in og_required:
         for meta in data:
-            if meta.get('property') == og_type:
-                count + 1
+            if meta.get('name') == og_type or meta.get('property') == og_type:
                 og_found.append(og_type)
-                break
             else:
-                print "Item {} not found.".format(og_type)
                 continue
-        assert count == 4
 
-
-    # Final assert testing the 2 lists
-    #for item in og_required:
-        #if item in og_found:
-        #    og_assert = True
-        #    break
-        #else:
-        #    print "Item {} not found".format(item)
-        #    og_assert = False
-    #assert og_assert
+    for item in og_required:
+        if item in og_found:
+            #og_assert = True
+            continue
+        else:
+            print "Item {} not found".format(item)
+            og_assert = False
+    assert og_assert
