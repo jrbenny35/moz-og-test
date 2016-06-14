@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class TestOpenGraphStandards:
+class test_open_graph_standards:
 
     def test(self, meta, required_tags, found_tags):
         og_assert = True
