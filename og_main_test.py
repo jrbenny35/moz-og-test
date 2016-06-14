@@ -1,34 +1,27 @@
 import pytest
-from test_opengraph_standards import TestOpenGraphStandards
+import requests
 
-og_required = [
-    'og:title',
-    'og:type',
-    'og:url',
-    'og:image',
-]
+from bs4 import BeautifulSoup
 
-og_found = []
 
-def test_it():
-    test = TestOpenGraphStandards() #Instansiate object
-    og_assert = True
-    # Pass in URL
-    data = test.get_url("http://nightly.mozilla.org")
+class TestOpenGraphStandards:
 
-    #Test list and add found tags to list
-    for og_type in og_required:
-        for meta in data:
-            if meta.get('name') == og_type or meta.get('property') == og_type:
-                og_found.append(og_type)
-            else:
+    def test(self, meta, required_tags, found_tags):
+        og_assert = True
+
+        # Test list and add found tags to list
+        for og_type in required_tags:
+            for item in meta:
+                if item.get('name') == og_type or item.get('property') == og_type:
+                    found_tags.append(og_type)
+                else:
+                    continue
+
+        # Test found list vs required list
+        for item in required_tags:
+            if item in found_tags:
                 continue
-
-    for item in og_required:
-        if item in og_found:
-            #og_assert = True
-            continue
-        else:
-            print "Item {} not found".format(item)
-            og_assert = False
-    assert og_assert
+            else:
+                print "Item {} not found".format(item)
+                og_assert = False
+        assert og_assert
