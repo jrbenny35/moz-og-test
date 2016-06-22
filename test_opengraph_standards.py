@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 class test_open_graph_standards:
 
-    def test(self, meta, required_tags, found_tags):
+    def test_open_graph_present_tags(self, meta, required_tags, found_tags):
         og_assert = True
 
         # Test list and add found tags to list
