@@ -11,7 +11,7 @@ def meta(response_obj):
 
 @pytest.fixture
 def response_obj():
-    return requests.get("http://facebook.com")
+    return requests.get('http://nightly.mozilla.org')
 
 @pytest.fixture
 def required_tags():
