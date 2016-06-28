@@ -1,44 +1,25 @@
-import requests
 import pytest
+import requests
+
 from bs4 import BeautifulSoup
 
 
-class TestOpenGraphStandards:
+class Test_Open_Graph_Standards:
 
-    # Required og tags
-    og_required = [
-        'og:title',
-        'og:type',
-        'og:url',
-        'og:image',
-    ]
+    def test_open_graph_present_tags(self, meta, required_tags, found_tags):
+        og_assert = True
 
-    # Stors og tags found on page
-    og_found = []
-
-    # Test if the page has required tags
-    @pytest.fixture
-    def test_for_og_standards(self, url):
-        for og_type in self.og_required:
-            for meta in url:
-                if meta.get('property') == og_type:
-                    self.og_found.append(og_type)
+        # Test url and add found tags to list
+        for req_tags in required_tags:
+            for item in meta:
+                if item.get('name') == req_tags or item.get('property') == req_tags:
+                    found_tags.append(req_tags)
                 else:
                     continue
-
-        # Run test against requred list every time
-        self.test_required()
-
-    # Test if the tags found match required tags
-    @pytest.fixture
-    def test_required(self):
-        for item in self.og_required:
-            assert item in self.og_found, "Item: {} was not found".format(item)
-            return True
-
-    # Load url and parse it
-    @pytest.fixture
-    def get_url(self, url):
-        og_site = requests.get(url)
-        soup = BeautifulSoup(og_site.content, "html.parser")
-        return soup.find_all("meta")
+            # Test found tags against required
+            if req_tags in found_tags:
+                continue
+            else:
+                print "Item {} not found".format(req_tags)
+                og_assert = False
+        assert og_assert
