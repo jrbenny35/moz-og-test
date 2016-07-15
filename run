@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xe
 
 sudo apt-get install virtualenv
 virtualenv venv
