@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sudo apt-get install virtualenv
+virtualenv venv
+source venv/bin/activate
+pip install pytest
+pip install requests
+pip install beautifulsoup4
+py.test test_opengraph_standards.py
